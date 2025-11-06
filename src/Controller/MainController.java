@@ -5,12 +5,17 @@ import View.MainView;
 
 import java.util.Scanner;
 
-public class MainController extends Controller {
+public final class MainController extends Controller {
     private final Scanner scanner;
+    private final RecordController recordControl;
+    private final SaveController saveControl;
+
 
     public MainController(MainModel model, MainView view) {
         super(model, view);
         scanner = new Scanner(System.in);
+        recordControl = new RecordController(model, view);
+        saveControl = new SaveController(model, view);
     }
 
     public void initialize() {

@@ -16,6 +16,6 @@ public class TestView {
             System.out.println("not supports color");
         }
 
-        mainView.displayBoard(chessBoard);
+        mainView.displayBoard(chessBoard, true);
     }
 }

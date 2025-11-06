@@ -5,6 +5,8 @@ import Model.ChessBoard;
 import Model.Team;
 
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Iterator;
 
 public final class MainView {
     public static final String emptyName = "　　　";
@@ -16,14 +18,25 @@ public final class MainView {
 
     private final PrintStream out;
 
-    public void displayBoard(ChessBoard chessBoard) {
+    public void displayBoard(ChessBoard chessBoard, boolean isRedTurn) {
+        final short startR = (short) (isRedTurn ? 0 : ChessBoard.rows-1);
+        final short startC = (short) (isRedTurn ? 0 : ChessBoard.cols-1);
+        final short increment = (short) (isRedTurn ? 1 : -1);
+
         Cell[][] cells = chessBoard.getBoard();
-        for (short r = 0; r < ChessBoard.rows; r++) {
+
+        for (short r = startR; checkIndex(r, true, isRedTurn); r+=increment) {
+            // placeholder var no need index-checking
+            out.print("  "); // indentation for id
             for (short c = 0; c < ChessBoard.cols; c++)
                 out.print("+－－－");
             out.println('+');
 
-            for (short c = 0; c < ChessBoard.cols; c++) {
+            // print row id
+            out.print((ChessBoard.rows - r) + " ");
+
+
+            for (short c = startC; checkIndex(c, false, isRedTurn); c+=increment) {
                 out.print(ANSI_RESET + '|');
                 String color = switch (cells[r][c].getType()) {
                     case TRAP -> ANSI_YELLOW_BACKGROUND;
@@ -44,10 +57,27 @@ public final class MainView {
             }
             out.println(ANSI_RESET + '|');
         }
+        // placeholder var no need index-checking
+        out.print("  ");
         for (short c = 0; c < ChessBoard.cols; c++) {
             out.print("+－－－");
         }
         out.println('+');
+
+        // print col id
+        out.print(emptyName);
+        for (short c = 0; c < ChessBoard.cols; c++) {
+            final char colID = isRedTurn ? (char)('A' + c) : (char) ('G' - c);
+            out.print(colID + emptyName);
+        }
+        out.println();
+    }
+
+    private boolean checkIndex(short x, boolean isRow, boolean isRed) {
+        if (isRed)
+            return isRow ? x < ChessBoard.rows : x < ChessBoard.cols;
+        else
+            return x >= 0;
     }
 
     private MainView() {
