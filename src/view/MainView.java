@@ -1,12 +1,11 @@
-package View;
+package view;
 
-import Model.Cell;
-import Model.ChessBoard;
-import Model.Team;
+import model.Cell;
+import model.CellType;
+import model.ChessBoard;
+import model.Team;
 
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Iterator;
 
 public final class MainView {
     public static final String emptyName = "　　　";

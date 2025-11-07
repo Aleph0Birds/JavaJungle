@@ -1,7 +1,7 @@
-package Controller;
+package controller;
 
-import Model.MainModel;
-import View.MainView;
+import model.MainModel;
+import view.MainView;
 
 public class Controller {
     protected MainModel model;

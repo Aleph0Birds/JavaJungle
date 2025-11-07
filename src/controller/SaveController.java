@@ -1,7 +1,7 @@
-package Controller;
+package controller;
 
 public final class SaveController extends Controller {
-    public SaveController(Model.MainModel model, View.MainView view) {
+    public SaveController(model.MainModel model, view.MainView view) {
         super(model, view);
     }
 }

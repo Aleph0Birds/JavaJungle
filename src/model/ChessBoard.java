@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public final class ChessBoard {
     public static final short rows = 9, cols = 7;

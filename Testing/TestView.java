@@ -1,5 +1,5 @@
-import Model.ChessBoard;
-import View.MainView;
+import model.ChessBoard;
+import view.MainView;
 import org.junit.Test;
 
 
