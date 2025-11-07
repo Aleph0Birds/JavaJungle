@@ -19,12 +19,12 @@ public final class MainView {
 
     private final PrintStream out;
 
-    public void displayBoard(ChessBoard chessBoard, boolean isRedTurn) {
+    public void displayBoard(MainModel model, boolean isRedTurn) {
         final short startR = (short) (isRedTurn ? 0 : ChessBoard.rows-1);
         final short startC = (short) (isRedTurn ? 0 : ChessBoard.cols-1);
         final short increment = (short) (isRedTurn ? 1 : -1);
 
-        Cell[][] cells = chessBoard.getBoard();
+        Cell[][] cells = model.chessBoard.getBoard();
 
         for (short r = startR; checkIndex(r, true, isRedTurn); r+=increment) {
             // placeholder var no need index-checking
@@ -84,6 +84,10 @@ public final class MainView {
             out.print(colID + emptyName);
         }
         out.println();
+
+        final String playerName = isRedTurn ? model.playerRedName : model.playerBlackName;
+        final String turnStr = isRedTurn ? "Red" : "Black";
+        out.printf("Current turn: %s (%s)%n", playerName, turnStr);
     }
 
     public void displayActionChoices(GameState state, Command[] choices) {

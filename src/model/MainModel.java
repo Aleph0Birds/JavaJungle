@@ -8,6 +8,7 @@ public final class MainModel {
     public String playerBlackName;
     public boolean isRedTurn;
     public GameState gameState;
+    public int round;
 
     private MainModel() {
         chessBoard = new ChessBoard();
@@ -15,6 +16,7 @@ public final class MainModel {
         playerBlackName = "Black"; // default
         gameState = GameState.NotStarted;
         isRedTurn = false;
+        round = 0;
     }
     private static MainModel instance;
     public static MainModel getInstance() {
