@@ -8,18 +8,26 @@ public class Command {
     private final String key;
     private final GameState[] availableStates;
     private final String description;
+    private final String usage;
     private Controller controller;
 
     public Command (String key,
                     GameState[] availableStates,
-                    String description) {
+                    String description,
+                    String usage) {
         assert key != null && !key.isEmpty();
         assert availableStates != null;
         assert description != null;
+        assert usage != null;
 
         this.key = key;
         this.availableStates = availableStates;
         this.description = description;
+        this.usage = usage;
+    }
+
+    public Command (String key, GameState[] availableStates, String description) {
+        this(key, availableStates,description,"");
     }
 
     public void invoke(String... args) {
@@ -44,6 +52,10 @@ public class Command {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getUsage() {
+        return usage;
     }
 
 }

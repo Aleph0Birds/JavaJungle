@@ -1,5 +1,6 @@
 package controller;
 
+import model.GameState;
 import model.gameIO.Command;
 import model.gameIO.CommandList;
 import model.MainModel;
@@ -40,7 +41,7 @@ public final class MainController extends Controller {
             if (targetCmd != null)
                 targetCmd.invoke(input);
             else
-                view.printError("Unknown command: " + input[0]);
+                view.printMsg("Unknown command: " + input[0]);
         }
     }
 
@@ -50,7 +51,7 @@ public final class MainController extends Controller {
 
     private Command parseInput(String input, Command[] commands) {
         try {
-            final int num = Integer.parseInt(input);
+            final int num = Integer.parseInt(input) - 1;
             if (num < 0 || num > commands.length)
                 throw new Exception();
             return commands[num];
@@ -66,6 +67,18 @@ public final class MainController extends Controller {
 
     @Override
     public void acceptCommand(Command command,  String... args) {
+
+        switch (command.getKey()) {
+            case "exit":
+                view.printMsg("Exiting the game...");
+                System.exit(0);
+            return;
+            case "start":
+                view.printMsg("Starting the game...");
+                model.gameState = GameState.GameStarted;
+                view.displayBoard(model);
+                break;
+        }
     }
 
 }

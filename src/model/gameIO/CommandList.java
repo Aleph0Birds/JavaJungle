@@ -29,27 +29,32 @@ public class CommandList {
         end  = new Command("end",
                 new GameState[]{GameState.GameStarted},
                 "Ends the chess game.");
-        namePlayer = new Command("playerName",
+        namePlayer = new Command("name",
                 new GameState[]{GameState.NotStarted, GameState.GameOver},
-                "Names the players.");
+                "Names the players.",
+                "name <red|black> <name>");
 
         move = new Command("move",
                 new GameState[]{GameState.GameStarted},
-                "Moves pieces of the current player.");
+                "Moves pieces of the current player.",
+                "move <[piece name]|[cell index]> <up|down|left|right>");
         undoMove = new Command("undo",
                 new GameState[]{GameState.GameStarted},
                 "Undo the last move by previous player, at most 3 moves for each players.");
 
         replayRecord = new Command("replay",
                 new GameState[]{GameState.NotStarted, GameState.GameOver},
-                "Replays the game with the recorded .record file");
+                "Replays the game with the recorded .record file, can choose from a list of record files",
+                "replay <list|[record file name]>");
 
         saveGame = new Command("save",
                 new GameState[]{GameState.GameStarted},
-                "Saves the current game into .jungle file.");
+                "Saves the current game into .jungle file.",
+                "save <[save name]>");
         loadGame = new Command("load",
                 new GameState[]{GameState.NotStarted, GameState.GameOver},
-                "Loads the current game from .jungle file.");
+                "Loads the current game from .jungle file.",
+                "load <[saved file name]>");
 
         exit = new Command("exit",
                 GameState.values(),

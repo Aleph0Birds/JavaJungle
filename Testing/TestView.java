@@ -1,7 +1,8 @@
 import model.MainModel;
-import model.chess.ChessBoard;
 import view.MainView;
 import org.junit.Test;
+
+import java.util.Stack;
 
 
 public class TestView {
@@ -17,6 +18,17 @@ public class TestView {
 //            System.out.println("not supports color");
 //        }
 
-        mainView.displayBoard(model, false);
+        mainView.displayBoard(model);
+    }
+
+    @Test
+    public void testStack() {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        System.out.println(stack);
+        stack.removeLast();
+        System.out.println(stack);
     }
 }

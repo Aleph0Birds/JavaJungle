@@ -19,7 +19,8 @@ public final class MainView {
 
     private final PrintStream out;
 
-    public void displayBoard(MainModel model, boolean isRedTurn) {
+    public void displayBoard(MainModel model) {
+        final boolean isRedTurn = model.isRedTurn;
         final short startR = (short) (isRedTurn ? 0 : ChessBoard.rows-1);
         final short startC = (short) (isRedTurn ? 0 : ChessBoard.cols-1);
         final short increment = (short) (isRedTurn ? 1 : -1);
@@ -101,15 +102,17 @@ public final class MainView {
         int i = 0;
         for  (; i < choices.length; i++) {
             final Command c = choices[i];
-            out.printf("%d: %s - %s%n", i, c.getKey(), c.getDescription());
+            out.printf("%d: %s - %s%n", i+1, c.getKey(), c.getDescription());
+            if (!c.getUsage().isEmpty())
+                out.printf("   Usage: %s%n", c.getUsage());
         }
 
         // prompt
-        out.printf("Enter your choice (1-%d): ", i);
+        out.printf("Enter your choice (1-%d or cmd name): ", i);
     }
 
-    public void printError(String errorMsg) {
-        out.println(errorMsg);
+    public void printMsg(String msg) {
+        out.println(msg);
     }
 
     private boolean checkIndex(short x, boolean isRow, boolean isRed) {
