@@ -1,4 +1,4 @@
-package gameIO;
+package model.gameIO;
 
 import controller.Controller;
 import model.GameState;
@@ -8,20 +8,22 @@ public class Command {
     private final String key;
     private final GameState[] availableStates;
     private final String description;
-    private final int id;
     private Controller controller;
 
-    public Command (String key, int id,
+    public Command (String key,
                     GameState[] availableStates,
                     String description) {
         assert key != null && !key.isEmpty();
         assert availableStates != null;
         assert description != null;
-        assert id >= 0;
+
         this.key = key;
         this.availableStates = availableStates;
         this.description = description;
-        this.id = id;
+    }
+
+    public void invoke(String... args) {
+        controller.acceptCommand(this,  args);
     }
 
     public void bindController(Controller controller) {
@@ -44,5 +46,4 @@ public class Command {
         return description;
     }
 
-    public int getID() { return id; }
 }

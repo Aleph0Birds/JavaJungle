@@ -1,6 +1,6 @@
 package controller;
 
-import gameIO.Command;
+import model.gameIO.Command;
 import model.MainModel;
 import view.MainView;
 
@@ -13,7 +13,7 @@ public class Controller {
         this.view = view;
     }
 
-    public void acceptCommand(Command command) {}
+    public void acceptCommand(Command command, String... args) {}
 
     /**
      *

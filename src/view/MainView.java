@@ -1,5 +1,6 @@
 package view;
 
+import model.gameIO.Command;
 import model.*;
 import model.chess.*;
 
@@ -12,9 +13,9 @@ public final class MainView {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+    // public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    // public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+    // public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
 
     private final PrintStream out;
 
@@ -85,7 +86,7 @@ public final class MainView {
         out.println();
     }
 
-    public void displayActionChoices(GameState state, String[] choices) {
+    public void displayActionChoices(GameState state, Command[] choices) {
         final String outState = switch (state) {
             case NotStarted -> "not started";
             case GameStarted -> "ongoing";
@@ -94,11 +95,17 @@ public final class MainView {
 
         out.printf("Game is %s, please select one of the following actions:%n", outState);
         int i = 0;
-        for  (; i < choices.length; i++)
-            out.printf("%d - %s%n", i, choices[i]);
+        for  (; i < choices.length; i++) {
+            final Command c = choices[i];
+            out.printf("%d: %s - %s%n", i, c.getKey(), c.getDescription());
+        }
 
         // prompt
         out.printf("Enter your choice (1-%d): ", i);
+    }
+
+    public void printError(String errorMsg) {
+        out.println(errorMsg);
     }
 
     private boolean checkIndex(short x, boolean isRow, boolean isRed) {

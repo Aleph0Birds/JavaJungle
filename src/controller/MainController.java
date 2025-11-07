@@ -1,6 +1,7 @@
 package controller;
 
-import gameIO.Command;
+import model.gameIO.Command;
+import model.gameIO.CommandList;
 import model.MainModel;
 import view.MainView;
 
@@ -22,6 +23,7 @@ public final class MainController extends Controller {
 
     public void initialize() {
         model.chessBoard.initChessBoard();
+        CommandList.initialize(this);
     }
 
     /**
@@ -29,9 +31,16 @@ public final class MainController extends Controller {
      */
     public void startLoop() {
         while (true) {
-            String[] choices = getChoices();
+            Command[] choices = CommandList.getCommands(model.gameState);
             view.displayActionChoices(model.gameState, choices);
-            String input = scanner.nextLine();
+            String[] input = scanner.nextLine().strip().split(" ");
+            if (input.length == 0) continue;
+
+            final Command targetCmd = parseInput(input[0], choices);
+            if (targetCmd != null)
+                targetCmd.invoke(input);
+            else
+                view.printError("Unknown command: " + input[0]);
         }
     }
 
@@ -39,17 +48,24 @@ public final class MainController extends Controller {
     public RecordController recordControl() { return recordControl; }
     public SaveController saveControl() { return saveControl; }
 
-    private String[] getChoices() {
+    private Command parseInput(String input, Command[] commands) {
+        try {
+            final int num = Integer.parseInt(input);
+            if (num < 0 || num > commands.length)
+                throw new Exception();
+            return commands[num];
+        } catch (Exception e) {
+            for  (Command command : commands) {
+                if (command.getKey().equals(input.strip()))
+                    return command;
+            }
+        }
+
         return null;
     }
 
-    private void parseCommand(String command) {
-        switch (command) {}
-    }
-
     @Override
-    public void acceptCommand(Command command) {
-        int a = 1 + 1;
+    public void acceptCommand(Command command,  String... args) {
     }
 
 }
