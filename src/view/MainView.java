@@ -8,6 +8,7 @@ import model.Team;
 import java.io.PrintStream;
 
 public final class MainView {
+    public static final char fullWidthSpace = '　';
     public static final String emptyName = "　　　";
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -34,24 +35,35 @@ public final class MainView {
             // print row id
             out.print((ChessBoard.rows - r) + " ");
 
-
             for (short c = startC; checkIndex(c, false, isRedTurn); c+=increment) {
                 out.print(ANSI_RESET + '|');
-                String color = switch (cells[r][c].getType()) {
+                final CellType cellType = cells[r][c].getType();
+                final String color = switch (cellType) {
                     case TRAP -> ANSI_YELLOW_BACKGROUND;
                     case RIVER -> ANSI_BLUE_BACKGROUND;
                     case DEN -> ANSI_RED_BACKGROUND;
                     case null, default -> ANSI_RESET;
                 };
+
+                final char cellTypeChar = switch (cellType) {
+                    case TRAP -> 'Ｔ';
+                    case RIVER -> '～';
+                    case DEN -> '０';
+                    case null, default -> fullWidthSpace;
+                };
+
                 out.print(color);
-                if(cells[r][c].getPiece() == null)
-                    out.print(emptyName);
-                else {
-                    out.print('　');
+                if (cells[r][c].getPiece() == null) {
+                    final String outSpace  =
+                            String.valueOf(cellTypeChar) + fullWidthSpace + cellTypeChar;
+
+                    out.print(outSpace);
+                } else {
+                    out.print(cellTypeChar);
                     if (cells[r][c].getPiece().team() == Team.RED)
                         out.print(ANSI_RED);
                     out.print(cells[r][c].getPiece().getName());
-                    out.print('　');
+                    out.print(cellTypeChar);
                 }
             }
             out.println(ANSI_RESET + '|');
