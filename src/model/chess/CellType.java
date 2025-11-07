@@ -1,4 +1,4 @@
-package model;
+package model.chess;
 
 public enum CellType {
     EMPTY,

@@ -1,4 +1,4 @@
-import model.ChessBoard;
+import model.chess.ChessBoard;
 import view.MainView;
 import org.junit.Test;
 
@@ -9,13 +9,13 @@ public class TestView {
         MainView mainView = MainView.getInstance();
         ChessBoard chessBoard = new ChessBoard();
         chessBoard.initChessBoard();
+//        doesn't work
+//        if (System.console() != null && System.getenv().get("TERM") != null) {
+//            System.out.println("supports color");
+//        } else {
+//            System.out.println("not supports color");
+//        }
 
-        if (System.console() != null && System.getenv().get("TERM") != null) {
-            System.out.println("supports color");
-        } else {
-            System.out.println("not supports color");
-        }
-
-        mainView.displayBoard(chessBoard, true);
+        mainView.displayBoard(chessBoard, false);
     }
 }

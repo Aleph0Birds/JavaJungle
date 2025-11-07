@@ -1,5 +1,7 @@
 package model;
 
+import model.chess.ChessBoard;
+
 public final class MainModel {
     public ChessBoard chessBoard;
     public String playerRedName;

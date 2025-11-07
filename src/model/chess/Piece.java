@@ -1,4 +1,4 @@
-package model;
+package model.chess;
 
 import java.util.Objects;
 

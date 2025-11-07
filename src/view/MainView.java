@@ -85,6 +85,22 @@ public final class MainView {
         out.println();
     }
 
+    public void displayActionChoices(GameState state, String[] choices) {
+        final String outState = switch (state) {
+            case NotStarted -> "not started";
+            case GameStarted -> "ongoing";
+            case GameOver -> "over";
+        };
+
+        out.printf("Game is %s, please select one of the following actions:%n", outState);
+        int i = 0;
+        for  (; i < choices.length; i++)
+            out.printf("%d - %s%n", i, choices[i]);
+
+        // prompt
+        out.printf("Enter your choice (1-%d): ", i);
+    }
+
     private boolean checkIndex(short x, boolean isRow, boolean isRed) {
         if (isRed)
             return isRow ? x < ChessBoard.rows : x < ChessBoard.cols;
