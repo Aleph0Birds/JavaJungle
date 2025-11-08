@@ -2,10 +2,13 @@ package model.chess;
 
 public final class ChessBoard {
     public static final short rows = 9, cols = 7;
+
     private final Cell[][] board;
+    private final Piece[] pieces;
 
     public ChessBoard() {
         board = new Cell[rows][cols];
+        pieces = new Piece[8 * 2];
     }
 
     public void initChessBoard() {
@@ -18,15 +21,24 @@ public final class ChessBoard {
         initCellPieces();
     }
 
+
+
     private void setCellTypes(int r, int c, CellType type) {
         board[r][c].setType(type);
         board[rows - r - 1][cols - c - 1].setType(type);
     }
 
     private void placePiece(int r, int c, int rank) {
-        board[r][c].setPiece(new Piece((byte)rank, Team.BLACK));
+        final Piece red = new Piece((byte)rank, Team.RED);
+        board[r][c].setPiece(red);
+        red.setPosition(new Vec2(c, r));
+        pieces[rank] = red;
+
+        final Piece black = new Piece((byte)rank, Team.BLACK);
         board[rows - r - 1][cols - c - 1]
-                .setPiece(new Piece((byte)rank, Team.RED));
+                .setPiece(black);
+        black.setPosition(new Vec2(rows - r - 1, cols - c - 1));
+        pieces[rank + 8] = black;
     }
 
     private void initCellType() {
@@ -43,14 +55,30 @@ public final class ChessBoard {
     }
 
     private void initCellPieces() {
-        placePiece(2, 0, 0); // rat
-        placePiece(1, 5, 1); // cat
-        placePiece(1, 1, 2); // dog
-        placePiece(2, 4, 3); // wolf
-        placePiece(2, 2, 4); // leopard
-        placePiece(0, 6, 5); // tiger
-        placePiece(0, 0, 6); // lion
-        placePiece(2, 6, 7); // elephant
+        placePiece(2, 6, 0); // rat
+        placePiece(1, 1, 1); // cat
+        placePiece(1, 5, 2); // dog
+        placePiece(2, 2, 3); // wolf
+        placePiece(2, 4, 4); // leopard
+        placePiece(0, 0, 5); // tiger
+        placePiece(0, 6, 6); // lion
+        placePiece(2, 0, 7); // elephant
+    }
+
+    public Vec2 getIndexByPieceName(String name, Team team) {
+        for (int i = 0; i < Piece.names.length; i++) {
+            if (name.equals(Piece.names[i])) {
+                if (team == Team.BLACK) i += 8;
+                return pieces[i].getPosition();
+            };
+        }
+        return null;
+    }
+
+    public Vec2 getIndexByBoardIndex(String boardIndex) {
+        if (boardIndex.length() != 2)
+            return null;
+        return new Vec2(boardIndex.charAt(0) - 'A', boardIndex.charAt(1) - '1');
     }
 
     public Cell getCell(int r, int c) {

@@ -2,7 +2,7 @@ package model.chess;
 
 public record Move(Piece piece,
                    Vec2 position,
-                   MoveDirection direction,
+                   Vec2 destination,
                    Piece capturedPiece)
 {
 

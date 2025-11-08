@@ -20,6 +20,8 @@ public final class MainController extends Controller {
         recordControl = new RecordController(model, view);
         saveControl = new SaveController(model, view);
         chessController = new ChessController(model, view);
+
+        instance = this;
     }
 
     public void initialize() {
@@ -35,13 +37,13 @@ public final class MainController extends Controller {
             Command[] choices = CommandList.getCommands(model.gameState);
             view.displayActionChoices(model.gameState, choices);
             String[] input = scanner.nextLine().strip().split(" ");
-            if (input.length == 0) continue;
+            if (input.length == 0 || input[0].isEmpty()) continue;
 
             final Command targetCmd = parseInput(input[0], choices);
             if (targetCmd != null)
                 targetCmd.invoke(input);
             else
-                view.printMsg("Unknown command: " + input[0]);
+                view.printErr("Unknown command: " + input[0]);
         }
     }
 
@@ -74,7 +76,7 @@ public final class MainController extends Controller {
                 break;
             case "start":
                 model.gameState = GameState.GameStarted;
-                view.printMsg("Game started.");
+                view.printMsgUnderBoard("Game started.");
                 view.displayBoard(model);
                 break;
             case "end":
@@ -110,6 +112,10 @@ public final class MainController extends Controller {
         }
     }
 
+    private static MainController instance;
+    public static MainController getInstance() {
+        return instance;
+    }
 }
 
 // categorize

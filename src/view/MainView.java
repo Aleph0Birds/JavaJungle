@@ -19,15 +19,21 @@ public final class MainView {
 
     private final PrintStream out;
 
+    private String pendingMsg = null;
+    private String pendingErr = null;
+
     public void displayBoard(MainModel model) {
-        final boolean isRedTurn = model.isRedTurn;
-        final short startR = (short) (isRedTurn ? 0 : ChessBoard.rows-1);
+        final boolean isRedTurn = model.turn == Team.RED;
+        final short startR = (short) (isRedTurn ? ChessBoard.rows-1 : 0);
         final short startC = (short) (isRedTurn ? 0 : ChessBoard.cols-1);
-        final short increment = (short) (isRedTurn ? 1 : -1);
+        final short incrementR = (short) (isRedTurn ? -1 : 1);
+        final short incrementC = (short) (isRedTurn ? 1 : -1);
 
         Cell[][] cells = model.chessBoard.getBoard();
+        final String playerName = isRedTurn ? model.playerRedName : model.playerBlackName;
 
         for (short r = startR; checkIndex(r, true, isRedTurn); r+=increment) {
+        for (short r = startR; checkIndex(r, true, isRedTurn); r+=incrementR) {
             // placeholder var no need index-checking
             out.print("  "); // indentation for id
             for (short c = 0; c < ChessBoard.cols; c++)
@@ -35,9 +41,9 @@ public final class MainView {
             out.println('+');
 
             // print row id
-            out.print((ChessBoard.rows - r) + " ");
+            out.print((r+1) + " ");
 
-            for (short c = startC; checkIndex(c, false, isRedTurn); c+=increment) {
+            for (short c = startC; checkIndex(c, false, isRedTurn); c+=incrementC) {
                 out.print(ANSI_RESET + '|');
                 final CellType cellType = cells[r][c].getType();
 
@@ -63,7 +69,7 @@ public final class MainView {
 
                 final Piece piece = cells[r][c].getPiece();
                 if (piece != null) {
-                    final String teamColor = piece.team() == Team.RED ? ANSI_RED : "";
+                    final String teamColor = piece.getTeam() == Team.RED ? ANSI_RED : "";
                     out.print(ANSI_RESET +/* backgroundColor + */ teamColor + piece.getName() + ANSI_RESET);
                 } else out.print(cellTypeChar);
 
@@ -81,7 +87,7 @@ public final class MainView {
         // print col id
         out.print(emptyName);
         for (short c = 0; c < ChessBoard.cols; c++) {
-            final char colID = isRedTurn ? (char)('A' + c) : (char) ('G' - c);
+            final char colID = isRedTurn ? (char) ('A' + c) : (char)('G' - c);
             out.print(colID + emptyName);
         }
         out.println();
@@ -89,6 +95,16 @@ public final class MainView {
         final String playerName = isRedTurn ? model.playerRedName : model.playerBlackName;
         final String turnStr = isRedTurn ? "Red" : "Black";
         out.printf("Current turn: %s (%s)%n", playerName, turnStr);
+
+        if (pendingMsg != null) {
+            printMsg(pendingMsg);
+            pendingMsg = null;
+        }
+
+        if (pendingErr != null) {
+            printErr(pendingErr);
+            pendingErr = null;
+        }
     }
 
     public void displayActionChoices(GameState state, Command[] choices) {
@@ -112,8 +128,12 @@ public final class MainView {
     }
 
     public void printMsg(String msg, Object... args) {
-        msg = ANSI_BLUE + msg.formatted(args) +  ANSI_RESET;
+        msg = ANSI_BLUE + msg.formatted(args) + ANSI_RESET;
         out.println(msg);
+    }
+
+    public void printMsgUnderBoard(String msg, Object... args) {
+        pendingMsg = msg.formatted(args);
     }
 
     public void printErr(String msg, Object... args) {
@@ -121,11 +141,15 @@ public final class MainView {
         out.printf("%sError: %s%s%n", ANSI_RED, msg, ANSI_RESET);
     }
 
+    public void printErrUnderBoard(String msg, Object... args) {
+        pendingErr = msg.formatted(args);
+    }
+
     private boolean checkIndex(short x, boolean isRow, boolean isRed) {
         if (isRed)
-            return isRow ? x < ChessBoard.rows : x < ChessBoard.cols;
+            return isRow ? x >= 0 : x < ChessBoard.cols;
         else
-            return x >= 0;
+            return isRow ? x < ChessBoard.rows : x >= 0;
     }
 
     private MainView() {

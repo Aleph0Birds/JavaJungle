@@ -2,6 +2,7 @@ package model;
 
 import model.chess.ChessBoard;
 import model.chess.Move;
+import model.chess.Team;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -10,7 +11,7 @@ public final class MainModel {
     public ChessBoard chessBoard;
     public String playerRedName;
     public String playerBlackName;
-    public boolean isRedTurn;
+    public Team turn;
     public GameState gameState;
     public int round;
     public Stack<Move> lastMoves;
@@ -21,7 +22,7 @@ public final class MainModel {
         playerRedName = "Red"; // default
         playerBlackName = "Black"; // default
         gameState = GameState.NotStarted;
-        isRedTurn = true;
+        turn = Team.RED;
         round = 0;
         lastMoves = new Stack<>();
         moves = new ArrayList<>();
