@@ -31,7 +31,30 @@ public class TestChess {
         model.gameState = GameState.NotStarted;
 
         InputStream prevIn = System.in;
-        System.setIn(new ByteArrayInputStream("2\n3 b3 up\n".getBytes()));
+        System.setIn(new ByteArrayInputStream(
+                ("""
+                    2
+                    undo
+                    3 b3 up
+                    3 f8 up
+                    3 g3 left
+                    3 B8 left
+                    3 e3 down
+                    3 c7 left
+                    undo
+                    undo
+                    undo
+                    undo
+                    undo
+                    undo
+                    undo
+                    3 b3 up
+                    3 a7 up
+                    undo
+                    3 g3 up
+                    undo
+                    """)
+                        .getBytes()));
 //        System.setIn(prevIn);
 
         Scanner scanner = new Scanner(System.in);
@@ -39,20 +62,20 @@ public class TestChess {
         while (true) {
             Command[] choices = CommandList.getCommands(model.gameState);
             view.displayActionChoices(model.gameState, choices);
-            String[] input = scanner.nextLine().strip().split(" ");
-            if (input.length == 0 || input[0].isEmpty()) continue;
+            String input = scanner.nextLine();
+            System.out.println(input);
+            String[] inputs = input.strip().split(" ");
+            if (inputs.length == 0 || inputs[0].isEmpty()) continue;
 
-            final Command targetCmd = parseInput(input[0], choices);
+            final Command targetCmd = parseInput(inputs[0], choices);
             if (targetCmd != null)
-                targetCmd.invoke(input);
+                targetCmd.invoke(inputs);
             else
-                view.printErr("Unknown command: " + input[0]);
+                view.printErr("Unknown command: " + inputs[0]);
             if (!scanner.hasNextLine()) {
                 System.setIn(prevIn);
             }
         }
-
-
     }
 
     private Command parseInput(String input, Command[] commands) {

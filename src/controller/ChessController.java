@@ -12,7 +12,6 @@ public final class ChessController extends Controller {
 
     @Override
     public void acceptCommand(Command command, String... args) {
-
         switch(command.getKey()) {
             case "move":
                 if (args.length == 1) {
@@ -63,7 +62,7 @@ public final class ChessController extends Controller {
                     break;
                 }
 
-                Move move = tryMove(posByName == null ? posByIndex : posByName, direction);
+                final Move move = tryMove(posByName == null ? posByIndex : posByName, direction);
                 // moves failed
                 if (move == null)
                     break;
@@ -89,6 +88,36 @@ public final class ChessController extends Controller {
                 view.printMsgUnderBoard("Moves successfully.");
                 break;
             case "undo":
+                if (model.moves.isEmpty()) {
+                    view.printErrUnderBoard("There are no previous moves to take back.");
+                    break;
+                }
+                int times;
+                String playerName;
+                if (model.turn == Team.RED) {
+                    playerName = model.playerRedName;
+                    if (model.undoChanceRed <= 0) {
+                        view.printErrUnderBoard("%s (RED) you don't have any undo chance left.", playerName);
+                        break;
+                    }
+                    times = --model.undoChanceRed;
+                } else {
+                    playerName = model.playerBlackName;
+                    if (model.undoChanceBlack <= 0) {
+                        view.printErrUnderBoard("%s (BLACK) you don't have any undo chance left.", playerName);
+                        break;
+                    }
+                    times = --model.undoChanceBlack;
+                }
+
+                final Move lastMove = model.moves.removeLast();
+
+                final ChessBoard chessBoard = model.chessBoard;
+                chessBoard.getCell(lastMove.position().y , lastMove.position().x).setPiece(lastMove.piece());
+                chessBoard.getCell(lastMove.destination().y , lastMove.destination().x).setPiece(lastMove.capturedPiece());
+
+                view.printMsgUnderBoard("%s (%s) has took back their last move, %d times left.", playerName, model.turn.name(), times);
+                model.turn = model.turn == Team.RED ? Team.BLACK : Team.RED;
                 break;
         }
         view.displayBoard(model);
@@ -100,7 +129,7 @@ public final class ChessController extends Controller {
         final Cell attackCell = board.getCell(pos.y, pos.x);
         final Piece attackerPiece = attackCell.getPiece();
 
-        Vec2 dirVec = model.turn == Team.RED ? direction.direction() : direction.direction().neg();
+        final Vec2 dirVec = model.turn == Team.RED ? direction.vec() : direction.vec().neg();
         Vec2 movePos = pos.add(dirVec);
 
 
@@ -119,7 +148,7 @@ public final class ChessController extends Controller {
         if (defendCell.getType() == CellType.RIVER &&
                 (attackerPiece.getRank() == 5 ||  attackerPiece.getRank() == 6)) {
             while (defendCell.getType() == CellType.RIVER) {
-                movePos = movePos.add(direction.direction());
+                movePos = movePos.add(direction.vec());
                 defendCell = board.getCell(movePos.y, movePos.x);
 
                 // rat stuck the jump

@@ -12,7 +12,7 @@ public enum MoveDirection {
         direction = vector;
     }
 
-    public Vec2 direction() {
+    public Vec2 vec() {
         return direction;
     }
 }
