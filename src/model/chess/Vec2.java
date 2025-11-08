@@ -16,4 +16,9 @@ public class Vec2 {
     public Vec2 neg(){
         return new Vec2(-x, -y);
     }
+
+    @Override
+    public String toString() {
+        return x + "," + y;
+    }
 }

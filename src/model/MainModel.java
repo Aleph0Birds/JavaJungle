@@ -13,19 +13,28 @@ public final class MainModel {
     public String playerBlackName;
     public Team turn;
     public GameState gameState;
-    public int round;
-    public Stack<Move> lastMoves;
+    //public int round;
+    //public Stack<Move> lastMoves;
+
+    public byte undoChanceRed;
+    public byte undoChanceBlack;
     public ArrayList<Move> moves;
 
-    private MainModel() {
+    public void setDefault() {
         chessBoard = new ChessBoard();
         playerRedName = "Red"; // default
         playerBlackName = "Black"; // default
         gameState = GameState.NotStarted;
         turn = Team.RED;
-        round = 0;
-        lastMoves = new Stack<>();
+        //round = 0;
+        undoChanceRed = 3;
+        undoChanceBlack = 3;
+        //lastMoves = new Stack<>();
         moves = new ArrayList<>();
+    }
+
+    private MainModel() {
+        setDefault();
     }
     private static MainModel instance;
     public static MainModel getInstance() {

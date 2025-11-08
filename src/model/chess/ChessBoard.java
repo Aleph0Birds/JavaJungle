@@ -12,13 +12,18 @@ public final class ChessBoard {
     }
 
     public void initChessBoard() {
+        initChessBoard(true);
+    }
+
+    public void initChessBoard(boolean withPieces) {
         for (short r = 0; r < rows; ++r) {
             for (short c = 0; c < cols; ++c) {
                 board[r][c] = new Cell();
             }
         }
         initCellType();
-        initCellPieces();
+        if  (withPieces)
+            initCellPieces();
     }
 
 

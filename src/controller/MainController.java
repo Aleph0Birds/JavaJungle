@@ -4,8 +4,10 @@ import model.GameState;
 import model.gameIO.Command;
 import model.gameIO.CommandList;
 import model.MainModel;
+import model.gameIO.SaveLoad;
 import view.MainView;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public final class MainController extends Controller {
@@ -27,6 +29,11 @@ public final class MainController extends Controller {
     public void initialize() {
         model.chessBoard.initChessBoard();
         CommandList.initialize(this);
+        try {
+            SaveLoad.initialize();
+        } catch (IOException e) {
+            view.printErr(e.getMessage());
+        }
     }
 
     /**
@@ -71,6 +78,7 @@ public final class MainController extends Controller {
     public void acceptCommand(Command command, String... args) {
         switch (command.getKey()) {
             case "exit":
+                recordControl.saveRecording();
                 view.printMsg("Exiting the game...");
                 System.exit(0);
                 break;
@@ -81,6 +89,7 @@ public final class MainController extends Controller {
                 break;
             case "end":
                 model.gameState = GameState.GameOver;
+                recordControl.saveRecording();
                 view.printMsg("Game ended.");
                 break;
             case "name":
@@ -101,11 +110,10 @@ public final class MainController extends Controller {
                     break;
                 }
 
-                if (isPlayerRed) {
+                if (isPlayerRed)
                     model.playerRedName = args[2];
-                } else {
+                else
                     model.playerBlackName = args[2];
-                }
 
                 view.printMsg("Player %s's name has been named to '%s'.", args[1], args[2]);
                 break;
