@@ -190,7 +190,7 @@ public final class ChessController extends Controller {
         // have piece
         final Piece defenderPiece = defendCell.getPiece();
         // new defenderCell to move on
-        move = new Move(attackerPiece, movePos, movePos, defenderPiece);
+        move = new Move(attackerPiece, pos, movePos, defenderPiece);
 
         // check team
         if (defenderPiece.getTeam() == model.turn) {
@@ -213,6 +213,10 @@ public final class ChessController extends Controller {
                     defenderPiece.getName(), defenderPiece.getRank());
             return null;
         }
+
+        // TODO rat cannot eat pieces if other pieces are in different cell
+        // river rat cannot capture land elephant
+        // land rat cannot capture river rat and vice versa
 
         // captures enemy piece regardless of ranking
         if (defendCell.getType() == CellType.TRAP)
