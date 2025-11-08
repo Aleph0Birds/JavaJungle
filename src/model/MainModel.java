@@ -21,7 +21,7 @@ public final class MainModel {
         playerRedName = "Red"; // default
         playerBlackName = "Black"; // default
         gameState = GameState.NotStarted;
-        isRedTurn = false;
+        isRedTurn = true;
         round = 0;
         lastMoves = new Stack<>();
         moves = new ArrayList<>();

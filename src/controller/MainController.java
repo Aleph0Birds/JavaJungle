@@ -66,17 +66,46 @@ public final class MainController extends Controller {
     }
 
     @Override
-    public void acceptCommand(Command command,  String... args) {
-
+    public void acceptCommand(Command command, String... args) {
         switch (command.getKey()) {
             case "exit":
                 view.printMsg("Exiting the game...");
                 System.exit(0);
-            return;
+                break;
             case "start":
-                view.printMsg("Starting the game...");
                 model.gameState = GameState.GameStarted;
+                view.printMsg("Game started.");
                 view.displayBoard(model);
+                break;
+            case "end":
+                model.gameState = GameState.GameStarted;
+                view.printMsg("Game ended.");
+                break;
+            case "name":
+                if (args.length == 1) {
+                    view.printErr("Please enter 'red' or 'black' for naming which player.");
+                    break;
+                }
+                final boolean isPlayerRed = args[1].equalsIgnoreCase("red");
+                final boolean isPlayerBlack = args[1].equalsIgnoreCase("black");
+
+                if (!(isPlayerRed || isPlayerBlack)) {
+                    view.printErr("Please enter either 'red' or 'black' to choose a player.",  args[1]);
+                    break;
+                }
+
+                if (args.length == 2) {
+                    view.printErr("Please enter the player name to rename %s player.",  args[1]);
+                    break;
+                }
+
+                if (isPlayerRed) {
+                    model.playerRedName = args[2];
+                } else {
+                    model.playerBlackName = args[2];
+                }
+
+                view.printMsg("Player %s's name has been named to '%s'.", args[1], args[2]);
                 break;
         }
     }

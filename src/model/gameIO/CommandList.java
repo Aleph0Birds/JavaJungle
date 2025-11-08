@@ -32,7 +32,7 @@ public class CommandList {
         namePlayer = new Command("name",
                 new GameState[]{GameState.NotStarted, GameState.GameOver},
                 "Names the players.",
-                "name <red|black> <name>");
+                "name <red|black> <[name]>");
 
         move = new Command("move",
                 new GameState[]{GameState.GameStarted},

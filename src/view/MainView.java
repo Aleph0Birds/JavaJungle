@@ -111,8 +111,14 @@ public final class MainView {
         out.printf("Enter your choice (1-%d or cmd name): ", i);
     }
 
-    public void printMsg(String msg) {
+    public void printMsg(String msg, Object... args) {
+        msg = ANSI_BLUE + msg.formatted(args) +  ANSI_RESET;
         out.println(msg);
+    }
+
+    public void printErr(String msg, Object... args) {
+        msg = msg.formatted(args);
+        out.printf("%sError: %s%s%n", ANSI_RED, msg, ANSI_RESET);
     }
 
     private boolean checkIndex(short x, boolean isRow, boolean isRed) {
