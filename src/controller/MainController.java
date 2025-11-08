@@ -78,7 +78,7 @@ public final class MainController extends Controller {
                 view.displayBoard(model);
                 break;
             case "end":
-                model.gameState = GameState.GameStarted;
+                model.gameState = GameState.GameOver;
                 view.printMsg("Game ended.");
                 break;
             case "name":
