@@ -1,4 +1,5 @@
 import model.MainModel;
+import model.chess.Team;
 import view.MainView;
 import org.junit.Test;
 
@@ -11,6 +12,8 @@ public class TestView {
         MainView mainView = MainView.getInstance();
         MainModel model = MainModel.getInstance();
         model.chessBoard.initChessBoard();
+        model.playerBlackName = "asdfghj";
+        model.turn = Team.RED;
 //        doesn't work
 //        if (System.console() != null && System.getenv().get("TERM") != null) {
 //            System.out.println("supports color");
