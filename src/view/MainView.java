@@ -32,7 +32,12 @@ public final class MainView {
         Cell[][] cells = model.chessBoard.getBoard();
         final String playerName = isRedTurn ? model.playerRedName : model.playerBlackName;
 
-        for (short r = startR; checkIndex(r, true, isRedTurn); r+=increment) {
+        final short lengthOpp = (short)(!isRedTurn ? model.playerRedName : model.playerBlackName).length();
+        for (short i = 0; i < 14 - lengthOpp / 3; i++) {
+            out.print(fullWidthSpace);
+        }
+        out.println(!isRedTurn ? model.playerRedName : model.playerBlackName);
+
         for (short r = startR; checkIndex(r, true, isRedTurn); r+=incrementR) {
             // placeholder var no need index-checking
             out.print("  "); // indentation for id
@@ -92,7 +97,13 @@ public final class MainView {
         }
         out.println();
 
-        final String playerName = isRedTurn ? model.playerRedName : model.playerBlackName;
+        short length = (short)playerName.length();
+        for (short i = 0; i < 14 - length / 3; i++) {
+            out.print(fullWidthSpace);
+        }
+        out.println(playerName);
+
+
         final String turnStr = isRedTurn ? "Red" : "Black";
         out.printf("Current turn: %s (%s)%n", playerName, turnStr);
 
