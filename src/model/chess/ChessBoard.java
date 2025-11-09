@@ -29,7 +29,9 @@ public final class ChessBoard {
     public void movePiece(Vec2 from, Vec2 to) {
         // asserted from pos must have a piece
         final Cell fromCell = board[from.y][from.x];
-        board[to.y][to.x].setPiece(fromCell.getPiece());
+        final Piece piece = fromCell.getPiece();
+        piece.setPosition(to);
+        board[to.y][to.x].setPiece(piece);
         fromCell.setPiece(null);
     }
 
@@ -47,7 +49,7 @@ public final class ChessBoard {
         final Piece black = new Piece((byte)rank, Team.BLACK);
         board[rows - r - 1][cols - c - 1]
                 .setPiece(black);
-        black.setPosition(new Vec2(rows - r - 1, cols - c - 1));
+        black.setPosition(new Vec2(cols - c - 1,rows - r - 1));
         pieces[rank + 8] = black;
     }
 
