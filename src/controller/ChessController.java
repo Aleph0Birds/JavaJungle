@@ -12,7 +12,7 @@ public final class ChessController extends Controller {
 
     @Override
     public void acceptCommand(Command command, String... args) {
-        switch(command.getKey()) {
+        switch(command.getKey().toLowerCase()) {
             case "move":
                 if (args.length == 1) {
                     view.printErrUnderBoard("Please specific which piece you want to move. ie: A1 up / 豹 left");

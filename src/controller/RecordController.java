@@ -25,7 +25,7 @@ public final class RecordController extends Controller{
 
         String[] files;
         try {
-            files = SaveLoad.getFileNames();
+            files = SaveLoad.getFileNames(true);
         } catch (IOException e) {
             view.printErr(e.getMessage());
             return;
@@ -58,7 +58,7 @@ public final class RecordController extends Controller{
     }
 
     public void saveRecording() {
-        try (PrintWriter fileWriter = SaveLoad.getFileWriter()) {
+        try (PrintWriter fileWriter = SaveLoad.getFileWriter(true)) {
             fileWriter.printf("%s %s%n", model.playerRedName, model.playerBlackName);
             for (Move move : model.moves) {
                 fileWriter.println(move.position() + " " + move.destination());
@@ -70,7 +70,7 @@ public final class RecordController extends Controller{
     }
 
     public void playRecording(String fileName) {
-        try (BufferedReader reader = SaveLoad.getFileReader(fileName)) {
+        try (BufferedReader reader = SaveLoad.getFileReader(fileName, true)) {
             final MainModel dummyModel = new MainModel();
 
             String[] playerNames = reader.readLine().split(" ");

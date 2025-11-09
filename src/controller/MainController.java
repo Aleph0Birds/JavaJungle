@@ -76,7 +76,7 @@ public final class MainController extends Controller {
 
     @Override
     public void acceptCommand(Command command, String... args) {
-        switch (command.getKey()) {
+        switch (command.getKey().toLowerCase()) {
             case "exit":
                 if (!model.gameSaved)
                     recordControl.saveRecording();
