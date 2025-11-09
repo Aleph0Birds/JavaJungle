@@ -213,10 +213,17 @@ public final class ChessController extends Controller {
             return null;
         }
 
-        // TODO rat cannot eat pieces if other pieces are in different cell
+        // rat cannot eat pieces if other pieces are in different cell
         // river rat cannot capture land elephant
         // land rat cannot capture river rat and vice versa
-
+        if (attackerPiece.getRank() == 0) {
+            if (attackCell.getType() != defendCell.getType()) {
+                if (attackCell.getType() == CellType.RIVER ||
+                        defendCell.getType() == CellType.RIVER) {
+                    return move;
+                }
+            }
+        }
         // captures enemy piece regardless of ranking
         if (defendCell.getType() == CellType.TRAP)
             return move;
