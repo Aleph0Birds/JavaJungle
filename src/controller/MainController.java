@@ -78,18 +78,21 @@ public final class MainController extends Controller {
     public void acceptCommand(Command command, String... args) {
         switch (command.getKey()) {
             case "exit":
-                recordControl.saveRecording();
+                if (!model.gameSaved)
+                    recordControl.saveRecording();
                 view.printMsg("Exiting the game...");
                 System.exit(0);
                 break;
             case "start":
+                model.setDefault();
                 model.gameState = GameState.GameStarted;
                 view.printMsgUnderBoard("Game started.");
                 view.displayBoard(model);
                 break;
             case "end":
                 model.gameState = GameState.GameOver;
-                recordControl.saveRecording();
+                if (!model.gameSaved)
+                    recordControl.saveRecording();
                 view.printMsg("Game ended.");
                 break;
             case "name":

@@ -19,6 +19,7 @@ public final class MainModel {
     public byte undoChanceRed;
     public byte undoChanceBlack;
     public ArrayList<Move> moves;
+    public boolean gameSaved;
 
     public void setDefault() {
         chessBoard = new ChessBoard();
@@ -31,15 +32,15 @@ public final class MainModel {
         undoChanceBlack = 3;
         //lastMoves = new Stack<>();
         moves = new ArrayList<>();
+        gameSaved = false;
     }
 
-    private MainModel() {
+    public void switchTurn() {
+        turn = turn == Team.RED ? Team.BLACK : Team.RED;
+    }
+
+    public MainModel() {
         setDefault();
     }
-    private static MainModel instance;
-    public static MainModel getInstance() {
-        if (instance == null)
-            instance = new MainModel();
-        return instance;
-    }
+
 }

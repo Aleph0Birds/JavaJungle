@@ -17,8 +17,8 @@ public class TestChess {
 
     @Test
     public void testMove(){
-        MainModel model = MainModel.getInstance();
-        MainView view = MainView.getInstance();
+        MainModel model = new MainModel();
+        MainView view =  new  MainView();
         MainController controller = new MainController(model, view);
 
         controller.initialize();

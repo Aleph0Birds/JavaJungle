@@ -163,13 +163,7 @@ public final class MainView {
             return isRow ? x < ChessBoard.rows : x >= 0;
     }
 
-    private MainView() {
+    public MainView() {
         out = System.out;
-    }
-    private static MainView instance;
-    public static MainView getInstance() {
-        if (instance == null)
-            instance = new MainView();
-        return instance;
     }
 }

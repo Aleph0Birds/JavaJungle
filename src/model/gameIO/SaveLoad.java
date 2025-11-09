@@ -17,7 +17,7 @@ public class SaveLoad {
 
     public static String[] getFileNames() throws IOException {
         if (!Files.exists(savePath) || !Files.isDirectory(savePath))
-            return null;
+            initialize();
 
         return Files
                 .list(savePath)
@@ -30,11 +30,12 @@ public class SaveLoad {
     public static PrintWriter getFileWriter() throws IOException {
         String fileName = DateTimeFormatter.ofPattern("MMdd-ss").format(LocalDateTime.now());
         return new PrintWriter(
-                new FileWriter(Path.of(savePath.toString(), fileName + ".recording").toFile())
+                new FileWriter(Path.of(savePath.toString(), fileName + ".record").toFile())
         );
     }
 
     public static BufferedReader getFileReader(String name) throws IOException {
-        return new BufferedReader(new FileReader(Path.of(savePath.toString(), name + ".recording").toFile()));
+        if (!name.endsWith(".record")) name += ".record";
+        return new BufferedReader(new FileReader(Path.of(savePath.toString(), name).toFile()));
     }
 }

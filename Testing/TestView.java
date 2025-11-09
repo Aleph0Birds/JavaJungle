@@ -9,8 +9,8 @@ import java.util.Stack;
 public class TestView {
     @Test
     public void testDisplayBoard() {
-        MainView mainView = MainView.getInstance();
-        MainModel model = MainModel.getInstance();
+        MainView mainView = new MainView();
+        MainModel model = new MainModel();
         model.chessBoard.initChessBoard();
         model.playerBlackName = "asdfghj";
         model.turn = Team.RED;

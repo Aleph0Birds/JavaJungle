@@ -22,11 +22,16 @@ public final class ChessBoard {
             }
         }
         initCellType();
-        if  (withPieces)
+        if (withPieces)
             initCellPieces();
     }
 
-
+    public void movePiece(Vec2 from, Vec2 to) {
+        // asserted from pos must have a piece
+        final Cell fromCell = board[from.y][from.x];
+        board[to.y][to.x].setPiece(fromCell.getPiece());
+        fromCell.setPiece(null);
+    }
 
     private void setCellTypes(int r, int c, CellType type) {
         board[r][c].setType(type);

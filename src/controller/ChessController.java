@@ -113,8 +113,7 @@ public final class ChessController extends Controller {
                 final Move lastMove = model.moves.removeLast();
 
                 final ChessBoard chessBoard = model.chessBoard;
-                chessBoard.getCell(lastMove.position().y , lastMove.position().x).setPiece(lastMove.piece());
-                chessBoard.getCell(lastMove.destination().y , lastMove.destination().x).setPiece(lastMove.capturedPiece());
+                chessBoard.movePiece(lastMove.position(), lastMove.destination());
 
                 view.printMsgUnderBoard("%s (%s) has took back their last move, %d times left.", playerName, model.turn.name(), times);
                 model.turn = model.turn == Team.RED ? Team.BLACK : Team.RED;
