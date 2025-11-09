@@ -4,7 +4,7 @@ public final class ChessBoard {
     public static final short rows = 9, cols = 7;
 
     private final Cell[][] board;
-    private final Piece[] pieces;
+    Piece[] pieces;
 
     public ChessBoard() {
         board = new Cell[rows][cols];
@@ -91,6 +91,14 @@ public final class ChessBoard {
         if (boardIndex.length() != 2)
             return null;
         return new Vec2(boardIndex.charAt(0) - 'A', boardIndex.charAt(1) - '1');
+    }
+
+    public Piece[] getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(Piece[] pieces) {
+        this.pieces = pieces;
     }
 
     public Cell getCell(int r, int c) {

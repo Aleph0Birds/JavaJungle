@@ -31,8 +31,12 @@ public class SaveLoad {
                 .toArray(String[]::new);
     }
 
-    public static PrintWriter getFileWriter(boolean isRecord) throws IOException {
+    public static PrintWriter getWriter(boolean isRecord) throws IOException {
         String fileName = DateTimeFormatter.ofPattern("MMdd-ss").format(LocalDateTime.now());
+        return getWriter(fileName, isRecord);
+    }
+
+    public static PrintWriter getWriter(String fileName, boolean isRecord) throws IOException {
         final String typeSuffix = isRecord ? ".record" : ".sav";
         if (!fileName.endsWith(typeSuffix))
             fileName += typeSuffix;
@@ -41,7 +45,7 @@ public class SaveLoad {
         );
     }
 
-    public static BufferedReader getFileReader(String name, boolean isRecord) throws IOException {
+    public static BufferedReader getReader(String name, boolean isRecord) throws IOException {
         final String typeSuffix = isRecord ? ".record" : ".sav";
         if (!name.endsWith(typeSuffix)) name += typeSuffix;
         return new BufferedReader(new FileReader(Path.of(savePath.toString(), name).toFile()));

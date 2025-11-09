@@ -2,7 +2,6 @@ package controller;
 
 import model.MainModel;
 import model.chess.Move;
-import model.chess.Piece;
 import model.chess.Vec2;
 import model.gameIO.Command;
 import model.gameIO.SaveLoad;
@@ -18,11 +17,6 @@ public final class RecordController extends Controller{
 
     @Override
     public void acceptCommand(Command command, String... args) {
-        if (args.length == 1) {
-            view.printErr("Please use 'list' to get a list of the recordings or specific the recording name to replay.");
-            return;
-        }
-
         String[] files;
         try {
             files = SaveLoad.getFileNames(true);
@@ -31,7 +25,7 @@ public final class RecordController extends Controller{
             return;
         }
 
-        if (args[1].equalsIgnoreCase("list")) {
+        if (args.length == 1 || args[1].equalsIgnoreCase("list")) {
             if (files.length == 0){
                 view.printErr("There are no recordings available.");
                 return;
@@ -58,7 +52,7 @@ public final class RecordController extends Controller{
     }
 
     public void saveRecording() {
-        try (PrintWriter fileWriter = SaveLoad.getFileWriter(true)) {
+        try (PrintWriter fileWriter = SaveLoad.getWriter(true)) {
             fileWriter.printf("%s %s%n", model.playerRedName, model.playerBlackName);
             for (Move move : model.moves) {
                 fileWriter.println(move.position() + " " + move.destination());
@@ -70,7 +64,7 @@ public final class RecordController extends Controller{
     }
 
     public void playRecording(String fileName) {
-        try (BufferedReader reader = SaveLoad.getFileReader(fileName, true)) {
+        try (BufferedReader reader = SaveLoad.getReader(fileName, true)) {
             final MainModel dummyModel = new MainModel();
 
             String[] playerNames = reader.readLine().split(" ");
@@ -84,15 +78,14 @@ public final class RecordController extends Controller{
             String line = reader.readLine();
             while (line != null && !line.isEmpty()) {
                 final String[] vec = line.split(" ");
-                final String[] pos = vec[0].split(",");
-                final String[] dest =  vec[1].split(",");
+                final Vec2 pos = Vec2.fromString(vec[0]);
+                final Vec2 dest =  Vec2.fromString(vec[1]);
 
-                final int fromX = Integer.parseInt(pos[0]);
-                final int fromY = Integer.parseInt(pos[1]);
-                final int toX = Integer.parseInt(dest[0]);
-                final int toY = Integer.parseInt(dest[1]);
-
-                dummyModel.chessBoard.movePiece(new Vec2(fromX, fromY), new Vec2(toX, toY));
+                if (pos == null || dest == null) {
+                    view.printErr("Invalid coordinate in recording. Recording forced ended.");
+                    return;
+                }
+                dummyModel.chessBoard.movePiece(pos, dest);
                 view.displayBoard(dummyModel);
                 dummyModel.switchTurn();
 

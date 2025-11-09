@@ -71,7 +71,7 @@ public class CommandList {
         replayRecord.bindController(mainController.recordControl());
 
         saveGame.bindController(mainController.saveControl());
-        loadGame.bindController(mainController.recordControl());
+        loadGame.bindController(mainController.saveControl());
 
         commands = new Command[]{exit, start, end, namePlayer, move, undoMove, replayRecord, saveGame, loadGame};
     }

@@ -85,6 +85,7 @@ public final class MainController extends Controller {
                 break;
             case "start":
                 model.setDefault();
+                model.chessBoard.initChessBoard();
                 model.gameState = GameState.GameStarted;
                 view.printMsgUnderBoard("Game started.");
                 view.displayBoard(model);

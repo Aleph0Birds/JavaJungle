@@ -21,4 +21,19 @@ public class Vec2 {
     public String toString() {
         return x + "," + y;
     }
+
+    public static Vec2 fromString(String str) {
+        final String[] xy =  str.split(",");
+        // incorrect format
+        if (xy.length != 2)
+            return null;
+        try {
+            final int x = Integer.parseInt(xy[0].trim());
+            final int y = Integer.parseInt(xy[1].trim());
+
+            return new Vec2(x, y);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 }
