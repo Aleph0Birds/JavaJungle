@@ -15,7 +15,7 @@ public class TestIO {
     public void testList() {
         try {
             SaveLoad.initialize();
-            for (String fileName : SaveLoad.getFileNames()) {
+            for (String fileName : SaveLoad.getFileNames(false)) {
                 System.out.println(fileName);
             }
         } catch (IOException e) {

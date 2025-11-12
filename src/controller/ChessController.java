@@ -1,5 +1,6 @@
 package controller;
 
+import model.GameState;
 import model.MainModel;
 import model.chess.*;
 import model.gameIO.Command;
@@ -177,7 +178,7 @@ public final class ChessController extends Controller {
                     view.printErrUnderBoard("You cannot move piece into your own den.");
                     return null;
                 }
-
+                model.gameState = GameState.GameOver;
                 view.printMsgUnderBoard("========== %s wins! ==========", model.turn == Team.RED ? model.playerRedName : model.playerBlackName);
                 // wins
                 return move;
