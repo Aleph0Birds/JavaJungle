@@ -29,7 +29,7 @@ public final class MainView {
         final short incrementR = (short) (isRedTurn ? -1 : 1);
         final short incrementC = (short) (isRedTurn ? 1 : -1);
 
-        Cell[][] cells = model.chessBoard.getBoard();
+        final Cell[][] cells = model.chessBoard.getBoard();
         final String playerName = isRedTurn ? model.playerRedName : model.playerBlackName;
 
         final short lengthOpp = (short)(!isRedTurn ? model.playerRedName : model.playerBlackName).length();

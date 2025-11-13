@@ -69,24 +69,25 @@ public final class ChessController extends Controller {
                     break;
 
                 // valid move
-                final Vec2 dest = move.destination();
-                final Vec2 start = move.position();
-                final Cell destCell = model.chessBoard.getCell(dest.y, dest.x);
-                final Cell startCell = model.chessBoard.getCell(start.y, start.x);
-
-                if (move.capturedPiece() != null)
-                    // replace destCell piece with moved piece
-                    move.capturedPiece().setPosition(new Vec2(-1, -1));
-
-                // moves piece
-                destCell.setPiece(move.piece());
-                move.piece().setPosition(dest);
-                startCell.setPiece(null);
+                model.chessBoard.movePiece(move.position(), move.destination());
+//
+//                if (move.capturedPiece() != null)
+//                    // replace destCell piece with moved piece
+//                    move.capturedPiece().setPosition(new Vec2(-1, -1));
+//
+//                // moves piece
+//                destCell.setPiece(move.piece());
+//                move.piece().setPosition(dest);
+//                startCell.setPiece(null);
 
                 model.turn = model.turn == Team.RED ? Team.BLACK : Team.RED;
                 model.moves.add(move);
+                final String toCellIndex = String.valueOf((char)('A' + move.destination().x)) + (char)('1' + move.destination().y);
+                String succeedMovingMsg = "Moved %s to %s".formatted(move.piece().getName(), toCellIndex);
+                if (move.capturedPiece() != null)
+                    succeedMovingMsg += ", captured %s".formatted(move.capturedPiece().getName());
 
-                view.printMsgUnderBoard("Moves successfully.");
+                view.printMsgUnderBoard(succeedMovingMsg + '.');
                 break;
             case "undo":
                 if (model.moves.isEmpty()) {
@@ -114,7 +115,9 @@ public final class ChessController extends Controller {
                 final Move lastMove = model.moves.removeLast();
 
                 final ChessBoard chessBoard = model.chessBoard;
-                chessBoard.movePiece(lastMove.position(), lastMove.destination());
+                chessBoard.movePiece(lastMove.destination(), lastMove.position());
+                chessBoard.getCell(lastMove.destination()).setPiece(lastMove.capturedPiece());
+
 
                 view.printMsgUnderBoard("%s (%s) has took back their last move, %d times left.", playerName, model.turn.name(), times);
                 model.turn = model.turn == Team.RED ? Team.BLACK : Team.RED;

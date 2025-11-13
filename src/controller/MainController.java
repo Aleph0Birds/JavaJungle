@@ -22,8 +22,6 @@ public final class MainController extends Controller {
         recordControl = new RecordController(model, view);
         saveControl = new SaveController(model, view);
         chessController = new ChessController(model, view);
-
-        instance = this;
     }
 
     public void initialize() {
@@ -122,11 +120,6 @@ public final class MainController extends Controller {
                 view.printMsg("Player %s's name has been named to '%s'.", args[1], args[2]);
                 break;
         }
-    }
-
-    private static MainController instance;
-    public static MainController getInstance() {
-        return instance;
     }
 }
 

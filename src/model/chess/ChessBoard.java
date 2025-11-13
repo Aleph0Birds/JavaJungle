@@ -82,7 +82,7 @@ public final class ChessBoard {
             if (name.equals(Piece.names[i])) {
                 if (team == Team.BLACK) i += 8;
                 return pieces[i].getPosition();
-            };
+            }
         }
         return null;
     }
@@ -103,6 +103,10 @@ public final class ChessBoard {
 
     public Cell getCell(int r, int c) {
         return board[r][c];
+    }
+
+    public Cell getCell(Vec2 position) {
+        return board[position.y][position.x];
     }
 
     public Cell[][] getBoard() {
