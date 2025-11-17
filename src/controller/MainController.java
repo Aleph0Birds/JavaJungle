@@ -43,6 +43,7 @@ public final class MainController extends Controller {
         while (!requestedExit) {
             Command[] choices = CommandList.getCommands(model.gameState);
             view.displayActionChoices(model.gameState, choices);
+            if (!scanner.hasNextLine()) break;
             String[] input = scanner.nextLine().strip().split(" ");
             if (input.length == 0 || input[0].isEmpty()) continue;
 
