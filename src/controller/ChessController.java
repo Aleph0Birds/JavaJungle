@@ -96,7 +96,7 @@ public final class ChessController extends Controller {
                 }
                 int times;
                 String playerName;
-                if (model.turn == Team.RED) {
+                if (model.turn == Team.BLACK) {
                     playerName = model.playerRedName;
                     if (model.undoChanceRed <= 0) {
                         view.printErrUnderBoard("%s (RED) you don't have any undo chance left.", playerName);
