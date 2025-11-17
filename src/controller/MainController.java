@@ -16,6 +16,8 @@ public final class MainController extends Controller {
     private final SaveController saveControl;
     private final ChessController chessController;
 
+    private boolean requestedExit = false;
+
     public MainController(MainModel model, MainView view) {
         super(model, view);
         scanner = new Scanner(System.in);
@@ -38,7 +40,7 @@ public final class MainController extends Controller {
      * The main logical loop
      */
     public void startLoop() {
-        while (true) {
+        while (!requestedExit) {
             Command[] choices = CommandList.getCommands(model.gameState);
             view.displayActionChoices(model.gameState, choices);
             String[] input = scanner.nextLine().strip().split(" ");
@@ -50,6 +52,7 @@ public final class MainController extends Controller {
             else
                 view.printErr("Unknown command: " + input[0]);
         }
+        // idk
     }
 
     public ChessController chessControl() { return chessController; }
@@ -79,7 +82,7 @@ public final class MainController extends Controller {
                 if (!model.gameSaved)
                     recordControl.saveRecording();
                 view.printMsg("Exiting the game...");
-                System.exit(0);
+                this.requestedExit = true;
                 break;
             case "start":
                 model.setDefault();
