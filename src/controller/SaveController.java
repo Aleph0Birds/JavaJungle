@@ -25,7 +25,7 @@ public final class SaveController extends Controller {
                 if (args.length >= 2)
                     fileName = args[1];
                 else
-                    fileName = SaveLoad.getTimeString();
+                    fileName = SaveLoad.getTimeString(false);
 
                 writer = SaveLoad.getWriter(fileName, false);
 

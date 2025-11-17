@@ -31,10 +31,11 @@ public class SaveLoad {
                 .toArray(String[]::new);
     }
 
-    public static String getTimeString() {
+    public static String getTimeString(boolean isRecord) {
         return DateTimeFormatter
                 .ofPattern("MMdd-hhmmss")
-                .format(LocalDateTime.now());
+                .format(LocalDateTime.now())
+                + (isRecord ?  recordSuffix : saveSuffix);
     }
 
     public static PrintWriter getWriter(String fileName, boolean isRecord) throws IOException {

@@ -52,7 +52,8 @@ public final class RecordController extends Controller{
     }
 
     public void saveRecording() {
-        final String fileName = SaveLoad.getTimeString();
+        if (model.moves.isEmpty()) return;
+        final String fileName = SaveLoad.getTimeString(true);
         try (PrintWriter fileWriter = SaveLoad.getWriter(fileName,true)) {
             fileWriter.printf("%s %s%n", model.playerRedName, model.playerBlackName);
             for (Move move : model.moves) {
