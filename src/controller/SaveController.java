@@ -20,11 +20,14 @@ public final class SaveController extends Controller {
     public void acceptCommand(Command command, String... args) {
         if (command.getKey().equalsIgnoreCase("save")) {
             try {
+                String fileName;
                 PrintWriter writer;
                 if (args.length >= 2)
-                    writer = SaveLoad.getWriter(args[1], false);
+                    fileName = args[1];
                 else
-                    writer = SaveLoad.getWriter(false);
+                    fileName = SaveLoad.getTimeString();
+
+                writer = SaveLoad.getWriter(fileName, false);
 
                 final Piece[] pieces = model.chessBoard.getPieces();
 
@@ -34,7 +37,7 @@ public final class SaveController extends Controller {
                     writer.println(piece.getPosition().toString());
                 }
                 writer.close();
-                view.printMsg("Successfully saved.");
+                view.printMsg("Successfully saved as %s", fileName);
             } catch (IOException e) {
                 view.printErr(e.getMessage());
             }

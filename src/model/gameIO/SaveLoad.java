@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter;
 
 public class SaveLoad {
     public static Path savePath;
-    public final String recordSuffix = ".record";
-    public final String saveSuffix = ".sav";
+    public final static String recordSuffix = ".record";
+    public final static String saveSuffix = ".sav";
 
     public static void initialize() throws IOException {
         savePath = Path.of("saves");
@@ -21,7 +21,7 @@ public class SaveLoad {
         if (!Files.exists(savePath) || !Files.isDirectory(savePath))
             initialize();
 
-        final String typeSuffix = isRecord ? ".record" : ".sav";
+        final String typeSuffix = isRecord ? recordSuffix : saveSuffix;
 
         return Files
                 .list(savePath)
@@ -31,13 +31,14 @@ public class SaveLoad {
                 .toArray(String[]::new);
     }
 
-    public static PrintWriter getWriter(boolean isRecord) throws IOException {
-        String fileName = DateTimeFormatter.ofPattern("MMdd-ss").format(LocalDateTime.now());
-        return getWriter(fileName, isRecord);
+    public static String getTimeString() {
+        return DateTimeFormatter
+                .ofPattern("MMdd-hhmmss")
+                .format(LocalDateTime.now());
     }
 
     public static PrintWriter getWriter(String fileName, boolean isRecord) throws IOException {
-        final String typeSuffix = isRecord ? ".record" : ".sav";
+        final String typeSuffix = isRecord ? recordSuffix : saveSuffix;
         if (!fileName.endsWith(typeSuffix))
             fileName += typeSuffix;
         return new PrintWriter(
@@ -46,7 +47,7 @@ public class SaveLoad {
     }
 
     public static BufferedReader getReader(String name, boolean isRecord) throws IOException {
-        final String typeSuffix = isRecord ? ".record" : ".sav";
+        final String typeSuffix = isRecord ? recordSuffix : saveSuffix;
         if (!name.endsWith(typeSuffix)) name += typeSuffix;
         return new BufferedReader(new FileReader(Path.of(savePath.toString(), name).toFile()));
     }

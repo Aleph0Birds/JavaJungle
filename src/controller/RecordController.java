@@ -52,12 +52,14 @@ public final class RecordController extends Controller{
     }
 
     public void saveRecording() {
-        try (PrintWriter fileWriter = SaveLoad.getWriter(true)) {
+        final String fileName = SaveLoad.getTimeString();
+        try (PrintWriter fileWriter = SaveLoad.getWriter(fileName,true)) {
             fileWriter.printf("%s %s%n", model.playerRedName, model.playerBlackName);
             for (Move move : model.moves) {
                 fileWriter.println(move.position() + " " + move.destination());
             }
             model.gameSaved = true;
+            view.printMsg("Game saved as %s.",  fileName);
         } catch (IOException e) {
             view.printErr(e.getMessage());
         }
