@@ -34,6 +34,10 @@ public class Command {
         controller.acceptCommand(this,  args);
     }
 
+    public boolean is(String key) {
+        return key.equalsIgnoreCase(this.key);
+    }
+
     public void bindController(Controller controller) {
         this.controller = controller;
     }

@@ -18,7 +18,7 @@ public final class SaveController extends Controller {
 
     @Override
     public void acceptCommand(Command command, String... args) {
-        if (command.getKey().equalsIgnoreCase("save")) {
+        if (command.is("save")) {
             try {
                 String fileName;
                 PrintWriter writer;
@@ -41,7 +41,7 @@ public final class SaveController extends Controller {
             } catch (IOException e) {
                 view.printErr(e.getMessage());
             }
-        } else if (command.getKey().equalsIgnoreCase("load")) {
+        } else if (command.is("load")) {
             try {
 
                 // list
