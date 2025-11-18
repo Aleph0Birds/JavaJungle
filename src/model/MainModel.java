@@ -5,7 +5,6 @@ import model.chess.Move;
 import model.chess.Team;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public final class MainModel {
     public ChessBoard chessBoard;

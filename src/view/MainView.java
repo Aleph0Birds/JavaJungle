@@ -90,10 +90,9 @@ public final class MainView {
         out.println('+');
 
         // print col id
-        out.print(emptyName);
         for (short c = 0; c < ChessBoard.cols; c++) {
             final char colID = isRedTurn ? (char) ('A' + c) : (char)('G' - c);
-            out.print(colID + emptyName);
+            out.print(emptyName + colID);
         }
         out.println();
 

@@ -126,7 +126,7 @@ public final class ChessController extends Controller {
         view.displayBoard(model);
     }
 
-    private Move tryMove(Vec2 pos, MoveDirection direction) {
+    public Move tryMove(Vec2 pos, MoveDirection direction) {
         final ChessBoard board = model.chessBoard;
         // x is column and y is row
         final Cell attackCell = board.getCell(pos.y, pos.x);
@@ -151,15 +151,15 @@ public final class ChessController extends Controller {
         if (defendCell.getType() == CellType.RIVER &&
                 (attackerPiece.getRank() == 5 ||  attackerPiece.getRank() == 6)) {
             while (defendCell.getType() == CellType.RIVER) {
-                movePos = movePos.add(direction.vec());
-                defendCell = board.getCell(movePos.y, movePos.x);
-
                 // rat stuck the jump
-                if (defendCell.getType() == CellType.RIVER &&
-                        defendCell.getPiece() != null) {
+                if (defendCell.getPiece() != null)
+                {
                     view.printErrUnderBoard("Tiger or Lion cannot jump across the river with rat in the path.");
                     return null;
                 }
+                movePos = movePos.add(direction.vec());
+                defendCell = board.getCell(movePos.y, movePos.x);
+
             }
         }
 
@@ -170,9 +170,11 @@ public final class ChessController extends Controller {
         if (defendCell.getPiece() == null) {
 
             // only rat can move into river
-            if (defendCell.getType() == CellType.RIVER &&
-                    attackerPiece.getRank() == 0)
-                return move;
+            if (defendCell.getType() == CellType.RIVER)
+                if (attackerPiece.getRank() == 0)
+                    return move;
+                else
+                    return null;
 
             // cannot enter own den
             if (defendCell.getType() == CellType.DEN) {
@@ -210,7 +212,7 @@ public final class ChessController extends Controller {
         else if (attackerPiece.getRank() == 7 && defenderPiece.getRank() == 0) {
             view.printErrUnderBoard("Elephant cannot capture rat.");
             return null;
-        } else if (attackerPiece.getRank() < defenderPiece.getRank()) {
+        } else if (attackerPiece.getRank() < defenderPiece.getRank() && defendCell.getType() != CellType.TRAP) {
             view.printErrUnderBoard("%s with rank %d cannot capture %s which has a higher rank %d.",
                     attackerPiece.getName(), attackerPiece.getRank(),
                     defenderPiece.getName(), defenderPiece.getRank());
@@ -224,7 +226,7 @@ public final class ChessController extends Controller {
             if (attackCell.getType() != defendCell.getType()) {
                 if (attackCell.getType() == CellType.RIVER ||
                         defendCell.getType() == CellType.RIVER) {
-                    return move;
+                    return null;
                 }
             }
         }
