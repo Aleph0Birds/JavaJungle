@@ -132,7 +132,29 @@ public class TestChess {
 
     @Test
     public void testUndo() {
+        final String key = "";
+        model.chessBoard.initChessBoard(false);
+        final Piece[] pieces = initPieces(model.chessBoard);
+        // L93
+        controller.acceptCommand(undoMove, key);
 
+        setPiece(new Vec2(0, 4), pieces[7]);
+        setPiece(new Vec2(6, 4), pieces[7+8]);
+        model.moves.add(new Move(pieces[7], new Vec2(0,0), new Vec2(0, 1),null));
+        model.moves.add(new Move(pieces[7], new Vec2(0,1), new Vec2(0, 2),null));
+        model.moves.add(new Move(pieces[7], new Vec2(0,2), new Vec2(0, 3), pieces[3+8]));
+        model.moves.add(new Move(pieces[7], new Vec2(0,3), new Vec2(0, 4),null));
+
+        model.moves.add(new Move(pieces[7+8], new Vec2(6,8), new Vec2(6, 7),null));
+        model.moves.add(new Move(pieces[7+8], new Vec2(6,7), new Vec2(6, 6),null));
+        model.moves.add(new Move(pieces[7+8], new Vec2(6,6), new Vec2(6, 5), pieces[3]));
+        model.moves.add(new Move(pieces[7+8], new Vec2(6,5), new Vec2(6, 4),null));
+
+        for (int i = 0; i < 7; i++) {
+            controller.acceptCommand(undoMove, key);
+        }
+        model.turn = Team.BLACK;
+        controller.acceptCommand(undoMove, key);
     }
 
     private void moveTest(Piece piece, MoveDirection moveDirection, boolean resultNull) {

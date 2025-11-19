@@ -25,9 +25,9 @@ public class SaveLoad {
 
         return Files
                 .list(savePath)
+                .map(Path::getFileName)
                 .map(Path::toString)
                 .filter(s -> s.endsWith(typeSuffix))
-                .map(str -> str.split("\\\\")[1])
                 .toArray(String[]::new);
     }
 

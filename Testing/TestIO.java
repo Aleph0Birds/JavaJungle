@@ -2,7 +2,10 @@ import model.gameIO.SaveLoad;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static model.gameIO.SaveLoad.savePath;
 
 public class TestIO {
     @Test
@@ -12,14 +15,12 @@ public class TestIO {
     }
 
     @Test
-    public void testList() {
-        try {
-            SaveLoad.initialize();
-            for (String fileName : SaveLoad.getFileNames(false)) {
-                System.out.println(fileName);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void testList() throws IOException {
+        SaveLoad.initialize();
+
+        var a = SaveLoad.getFileNames(true);
+        for(var b : a) {
+            System.out.println(b);
         }
     }
 }
