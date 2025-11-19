@@ -1,25 +1,27 @@
 import controller.MainController;
-import model.GameState;
 import model.MainModel;
-import model.chess.Cell;
-import model.chess.ChessBoard;
 import model.gameIO.Command;
 import model.gameIO.CommandList;
+import org.junit.Before;
 import org.junit.Test;
 import view.MainView;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Scanner;
 
 public class TestMain {
+    MainModel model;
+    MainView view;
+
+    @Before
+    public void setUp() {
+        model = new MainModel();
+        view = new MainView();
+    }
+
     @Test
     public void testMainLoop() {
-        MainModel model = new MainModel();
-        MainView view =  new  MainView();
-
-
-
+        Main.main(null);
         InputStream prevIn = System.in;
         System.setIn(new ByteArrayInputStream(
                 ("0\nasd\nstart\nend\n1")
@@ -34,8 +36,6 @@ public class TestMain {
 
     @Test
     public void testMainCommand() {
-        MainModel model = new MainModel();
-        MainView view =  new MainView();
         MainController controller = new MainController(model, view);
         controller.initialize();
 
@@ -49,8 +49,6 @@ public class TestMain {
 
     @Test
     public void testMainExit() {
-        MainModel model = new MainModel();
-        MainView view =  new MainView();
         MainController controller = new MainController(model, view);
         controller.initialize();
 
@@ -72,21 +70,5 @@ public class TestMain {
         controller.acceptCommand(command, args);
         args[1] = "asd";
         controller.acceptCommand(command, args);
-    }
-
-    private Command parseInput(String input, Command[] commands) {
-        try {
-            final int num = Integer.parseInt(input) - 1;
-            if (num < 0 || num > commands.length)
-                throw new Exception();
-            return commands[num];
-        } catch (Exception e) {
-            for  (Command command : commands) {
-                if (command.getKey().equals(input.strip()))
-                    return command;
-            }
-        }
-
-        return null;
     }
 }
