@@ -26,10 +26,7 @@ public class TestMain {
                 ("0\nasd\nstart\nend\n1")
                         .getBytes()));
 
-        MainController controller = new MainController(model, view);
-
-        controller.initialize();
-        controller.startLoop();
+        Main.main(null);
         System.setIn(prevIn);
     }
 
