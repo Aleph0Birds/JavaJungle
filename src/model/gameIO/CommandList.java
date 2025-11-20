@@ -76,16 +76,6 @@ public class CommandList {
         commands = new Command[]{exit, start, end, namePlayer, move, undoMove, replayRecord, saveGame, loadGame};
     }
 
-    // not in use
-    public Command parseCommand(String key) {
-        for (Command command : commands) {
-            if(command.getKey().equals(key))
-                return command;
-        }
-
-        return null;
-    }
-
     public static Command[] getCommands(GameState gameState) {
         ArrayList<Command> commandList = new ArrayList<>();
 

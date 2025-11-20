@@ -70,7 +70,17 @@ public final class RecordController extends Controller{
         try (BufferedReader reader = SaveLoad.getReader(fileName, true)) {
             final MainModel dummyModel = new MainModel();
 
-            String[] playerNames = reader.readLine().split(" ");
+            String line = reader.readLine();
+            if (line == null) {
+                view.printErr("Corrupted recording.");
+                return;
+            }
+            final String[] playerNames = line.split(" ");
+            if (playerNames.length < 2) {
+                view.printErr("Corrupted recording.");
+                return;
+            }
+
             dummyModel.playerRedName = playerNames[0];
             dummyModel.playerBlackName = playerNames[1];
             dummyModel.chessBoard.initChessBoard();
@@ -78,9 +88,13 @@ public final class RecordController extends Controller{
 
             final Scanner scanner = new Scanner(System.in);
 
-            String line = reader.readLine();
+            line = reader.readLine();
             while (line != null && !line.isEmpty()) {
                 final String[] vec = line.split(" ");
+                if (vec.length < 2) {
+                    view.printErr("Invalid coordinate in recording. Recording forced ended.");
+                    return;
+                }
                 final Vec2 pos = Vec2.fromString(vec[0]);
                 final Vec2 dest =  Vec2.fromString(vec[1]);
 

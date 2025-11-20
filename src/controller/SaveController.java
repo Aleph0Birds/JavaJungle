@@ -77,23 +77,38 @@ public final class SaveController extends Controller {
                 model.chessBoard.initChessBoard(false);
                 model.gameState = GameState.GameStarted;
 
-                final String[] meta = reader.readLine().split(" ");
+                String line = reader.readLine();
+                if (line == null) {
+                    view.printErr("Save is corrupted.");
+                    return;
+                }
+
+                final String[] meta = line.split(" ");
+                if (meta.length < 3) {
+                    view.printErr("Save file is corrupted.");
+                    return;
+                }
                 model.playerRedName = meta[0];
                 model.playerBlackName = meta[1];
-                model.turn = Team.valueOf(meta[2]);
+                try {
+                    model.turn = Team.valueOf(meta[2]);
+                } catch (IllegalArgumentException e) {
+                    view.printErr("Invalid team name: %s", meta[2]);
+                    return;
+                }
 
                 final Piece[] pieces = new Piece[8 * 2];
-                String line = reader.readLine();
+                line = reader.readLine();
                 int i = 0;
                 while (line != null && !line.isEmpty()) {
                     final Vec2 pos = Vec2.fromString(line);
 
                     if (pos == null) {
-                        view.printErr("Invalid position format, possibly corrupted.");
+                        view.printErr("Invalid position format, end loading.");
                         return;
                     }
 
-                    if (i > 16) {
+                    if (i >= 16) {
                         view.printErr("Extra pieces detected, ignored.");
                         break;
                     }
