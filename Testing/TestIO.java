@@ -2,10 +2,7 @@ import model.gameIO.SaveLoad;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static model.gameIO.SaveLoad.savePath;
 
 public class TestIO {
     @Test

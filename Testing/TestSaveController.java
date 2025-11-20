@@ -2,7 +2,6 @@ import controller.MainController;
 import controller.SaveController;
 import model.GameState;
 import model.MainModel;
-import model.chess.ChessBoard;
 import model.chess.Piece;
 import model.chess.Team;
 import model.chess.Vec2;
@@ -385,11 +384,58 @@ public class TestSaveController {
                 "Loads a saved game.",
                 "load <[filename]>"
         );
-        loadCmd.bindController(saveController);
 
         // Try to load corrupted file - should handle gracefully
         saveController.acceptCommand(loadCmd, "load", corruptedFile);
         // Should not crash, just print error
+    }
+
+    @Test
+    public void testAcceptLoadCommand() {
+        final Command asd = new Command(
+                "asd",
+                new GameState[]{},""
+        );
+        saveController.acceptCommand(asd, "asd");
+
+        Command loadCmd = new Command(
+                "load",
+                new GameState[]{GameState.NotStarted, GameState.GameOver},
+                "Loads a saved game.",
+                "load <[filename]>"
+        );
+        saveController.acceptCommand(loadCmd, "", "asd");
+        try {
+            var w = SaveLoad.getWriter("save", false);
+            w.close();
+            saveController.acceptCommand(loadCmd, "");
+            saveController.acceptCommand(loadCmd, "", "-1");
+            saveController.acceptCommand(loadCmd, "", "420");
+            saveController.acceptCommand(loadCmd, "", "asdsadada");
+            saveController.acceptCommand(loadCmd, "", "save");
+            var w2 = SaveLoad.getWriter("good", false);
+            w2.println("asd");
+            w2.close();
+            saveController.acceptCommand(loadCmd, "", "good");
+            var w3 = SaveLoad.getWriter("verygood", false);
+            w3.println("ILovePosi IHateNega RED");
+            w3.println("asdasd");
+            w3.close();
+            saveController.acceptCommand(loadCmd, "", "verygood");
+            var w4 = SaveLoad.getWriter("nah", false);
+            w4.println("ILovePosi IHateNega RED");
+            w4.println("-1,0");
+            w4.println("0,-1");
+            for (int i = 0; i < 8*2-3; i++)
+                w4.println("-1,-1");
+            w4.println("5,4");
+            w4.println("0,0");
+            w4.println("0,0");
+            w4.close();
+            saveController.acceptCommand(loadCmd, "", "nah");
+        }  catch(IOException ignored) {
+
+        }
     }
 }
 

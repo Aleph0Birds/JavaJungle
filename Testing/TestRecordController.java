@@ -6,6 +6,7 @@ import model.chess.Move;
 import model.chess.Piece;
 import model.chess.Team;
 import model.chess.Vec2;
+import model.gameIO.Command;
 import model.gameIO.SaveLoad;
 import org.junit.Before;
 import org.junit.After;
@@ -23,6 +24,7 @@ public class TestRecordController {
     private MainView view;
     private RecordController recordController;
     private MainController mainController;
+    private Command record;
 
     @Before
     public void setUp() throws IOException {
@@ -31,7 +33,8 @@ public class TestRecordController {
         mainController = new MainController(model, view);
         mainController.initialize();
         recordController = mainController.recordControl();
-
+        if (record == null)
+            record = new Command("record", new GameState[]{},"");
         // Ensure saves directory exists
         SaveLoad.initialize();
     }
@@ -247,6 +250,64 @@ public class TestRecordController {
         // Verify file was created
         String[] files = SaveLoad.getFileNames(true);
         assertTrue("Recording with capture should be saved", files.length > 0);
+    }
+
+    @Test
+    public void testAcceptCommand() {
+        recordController.acceptCommand(record, "");
+        recordController.acceptCommand(record, "", "list");
+        try {
+            Files.deleteIfExists(Path.of(SaveLoad.savePath + "asd.record"));
+            var w = SaveLoad.getWriter("asd", true);
+            recordController.acceptCommand(record, "", "list");
+            recordController.acceptCommand(record, "", "-69");
+            recordController.acceptCommand(record, "", "259");
+            recordController.acceptCommand(record, "", "asdsadad");
+            recordController.acceptCommand(record, "", "asd.record");
+            recordController.acceptCommand(record, "", "1");
+            w.close();
+        } catch (IOException ignored) {}
+    }
+
+    @Test
+    public void testPlayRecording() {
+        try {
+            // Empty
+            var w1 = SaveLoad.getWriter("a", true);
+            w1.close();
+            recordController.playRecording("a");
+            var w2 = SaveLoad.getWriter("as", true);
+            w2.println("corruptname");
+            w2.close();
+            recordController.playRecording("as");
+            var w3 = SaveLoad.getWriter("asd", true);
+            w3.println("NoCorrupt Name");
+            w3.println("wrong_corrdinate_format");
+            w3.close();
+            recordController.playRecording("asd");
+            var w4 = SaveLoad.getWriter("asdf", true);
+            w4.println("NoCorrupt Name");
+            w4.println("asd <-wrong_corrdinate_format");
+            w4.close();
+            recordController.playRecording("asdf");
+            var w5 = SaveLoad.getWriter("asdfg", true);
+            w5.println("NoCorrupt Name");
+            w5.println("0,0 ->wrong_corrdinate_format");
+            w5.close();
+            recordController.playRecording("asdfg");
+            var w6 = SaveLoad.getWriter("asdfgh", true);
+            w6.println("NoCorrupt Name");
+            w6.println("0,0 0,1");
+            w6.println("0,8 0,7");
+            w6.println("");
+            w6.close();
+            InputStream prevIn = System.in;
+            System.setIn(new ByteArrayInputStream(
+                    ("\nquit\n\n\n")
+                            .getBytes()));
+            recordController.playRecording("asdfgh");
+            System.setIn(prevIn);
+        } catch (IOException ignored) {}
     }
 }
 

@@ -21,7 +21,6 @@ public class TestMain {
 
     @Test
     public void testMainLoop() {
-        Main.main(null);
         InputStream prevIn = System.in;
         System.setIn(new ByteArrayInputStream(
                 ("0\nasd\nstart\nend\n1")
@@ -31,7 +30,7 @@ public class TestMain {
 
         controller.initialize();
         controller.startLoop();
-//        System.setIn(prevIn);
+        System.setIn(prevIn);
     }
 
     @Test
