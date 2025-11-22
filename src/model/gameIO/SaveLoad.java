@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 public class SaveLoad {
     public static Path savePath;
     public final static String recordSuffix = ".record";
-    public final static String saveSuffix = ".sav";
+    public final static String saveSuffix = ".jungle";
 
     public static void initialize() throws IOException {
         savePath = Path.of("saves");

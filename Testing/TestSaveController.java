@@ -41,7 +41,7 @@ public class TestSaveController {
         // Clean up test save files
         if (Files.exists(SaveLoad.savePath)) {
             Files.list(SaveLoad.savePath)
-                    .filter(path -> path.toString().endsWith(".sav"))
+                    .filter(path -> path.toString().endsWith(".jungle"))
                     .forEach(path -> {
                         try {
                             Files.deleteIfExists(path);
@@ -361,12 +361,12 @@ public class TestSaveController {
         String[] files = SaveLoad.getFileNames(false);
         boolean found = false;
         for (String file : files) {
-            if (file.contains("suffix_test") && file.endsWith(".sav")) {
+            if (file.contains("suffix_test") && file.endsWith(".jungle")) {
                 found = true;
                 break;
             }
         }
-        assertTrue("Save file should have .sav extension", found);
+        assertTrue("Save file should have .jungle extension", found);
     }
 
     @Test
