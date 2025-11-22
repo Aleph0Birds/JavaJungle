@@ -80,7 +80,12 @@ public final class ChessController extends Controller {
 //                move.piece().setPosition(dest);
 //                startCell.setPiece(null);
 
-                model.turn = model.turn == Team.RED ? Team.BLACK : Team.RED;
+                // check win
+                if (model.gameState == GameState.GameOver){
+                    view.printMsgUnderBoard("========== %s wins! ==========", model.turn == Team.RED ? model.playerRedName : model.playerBlackName);
+                }
+
+                model.switchTurn();
                 model.moves.add(move);
                 final String toCellIndex = String.valueOf((char)('A' + move.destination().x)) + (char)('1' + move.destination().y);
                 String succeedMovingMsg = "Moved %s to %s".formatted(move.piece().getName(), toCellIndex);
@@ -184,7 +189,6 @@ public final class ChessController extends Controller {
                     return null;
                 }
                 model.gameState = GameState.GameOver;
-                view.printMsgUnderBoard("========== %s wins! ==========", model.turn == Team.RED ? model.playerRedName : model.playerBlackName);
                 // wins
                 return move;
             }

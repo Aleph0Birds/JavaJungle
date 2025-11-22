@@ -52,6 +52,10 @@ public final class MainController extends Controller {
                 targetCmd.invoke(input);
             else
                 view.printErr("Unknown command: " + input[0]);
+            if (!model.gameSaved && model.gameState == GameState.GameOver) {
+                recordControl.saveRecording();
+                model.gameSaved = true;
+            }
         }
         // idk
     }
