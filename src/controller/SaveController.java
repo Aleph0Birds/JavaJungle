@@ -1,6 +1,7 @@
 package controller;
 
 import model.GameState;
+import model.chess.Move;
 import model.chess.Piece;
 import model.chess.Team;
 import model.chess.Vec2;
@@ -32,7 +33,11 @@ public final class SaveController extends Controller {
                 final Piece[] pieces = model.chessBoard.getPieces();
 
                 writer.printf("%s %s %s%n", model.playerRedName, model.playerBlackName, model.turn.name());
-
+                for (Move move : model.moves) {
+                    final int rank = move.capturedPiece() == null ? -1 : move.capturedPiece().getRank();
+                    writer.printf("%d %s %s %d%n", move.piece().getRank(), move.position(), move.destination(), rank);
+                }
+                writer.println("=");
                 for (Piece piece : pieces) {
                     writer.println(piece.getPosition().toString());
                 }
@@ -100,6 +105,31 @@ public final class SaveController extends Controller {
                 final Piece[] pieces = new Piece[8 * 2];
                 line = reader.readLine();
                 int i = 0;
+                Team team = Team.RED;
+                while (line != null && !line.equals("=")) {
+                    final Team otherTeam = team == Team.RED ? Team.BLACK : Team.RED;
+                    final String[] str =  line.split(" ");
+                    if (str.length != 4) {
+                        view.printErr("Invalid piece format.");
+                        return;
+                    }
+                    final int pRank = Integer.parseInt(str[0]);
+                    final Vec2 position = Vec2.fromString(str[1]);
+                    final Vec2 destination = Vec2.fromString(str[2]);
+                    final int cRank = Integer.parseInt(str[3]);
+
+                    final Move move = new Move(
+                            new Piece((byte)pRank, team),
+                            position,
+                            destination,
+                            cRank == -1 ? null : new Piece((byte)pRank, otherTeam)
+                    );
+                    model.moves.add(move);
+                    team = otherTeam;
+                    line = reader.readLine();
+                }
+
+                line = reader.readLine();
                 while (line != null && !line.isEmpty()) {
                     final Vec2 pos = Vec2.fromString(line);
 

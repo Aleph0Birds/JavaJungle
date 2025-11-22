@@ -143,7 +143,9 @@ public final class MainView {
     }
 
     public void printMsgUnderBoard(String msg, Object... args) {
-        pendingMsg = msg.formatted(args);
+        if (pendingMsg != null)
+            pendingMsg += ("%n" + msg).formatted(args);
+        else pendingMsg = msg.formatted(args);
     }
 
     public void printErr(String msg, Object... args) {
@@ -152,7 +154,9 @@ public final class MainView {
     }
 
     public void printErrUnderBoard(String msg, Object... args) {
-        pendingErr = msg.formatted(args);
+        if (pendingErr != null)
+            pendingErr += ("%n" + msg).formatted(args);
+        else pendingErr = msg.formatted(args);
     }
 
     private boolean checkIndex(short x, boolean isRow, boolean isRed) {
