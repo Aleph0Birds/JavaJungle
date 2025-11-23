@@ -237,10 +237,13 @@ public class TestSaveController {
         assertNotNull("Save file should exist", targetFile);
 
         try (BufferedReader reader = SaveLoad.getReader(targetFile, false)) {
-            reader.readLine(); // Skip metadata line
+            String line = reader.readLine(); // Skip metadata line
+            while (!line.equals("=")) {
+                line = reader.readLine();
+            }
 
             int pieceCount = 0;
-            String line;
+
             while ((line = reader.readLine()) != null && !line.isEmpty()) {
                 pieceCount++;
             }
